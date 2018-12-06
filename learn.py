@@ -28,6 +28,10 @@ from rl.memory import SequentialMemory
 from rl.core import Processor
 from rl.callbacks import FileLogger, ModelIntervalCheckpoint
 
+from time import strftime
+
+print("Started at",strftime("%Y-%m-%d-%H:%M:%S"))
+
 RUNDIR = DIR + '/runs'
 
 parser = argparse.ArgumentParser()
@@ -169,10 +173,13 @@ if args.mode == 'train':
 #   callbacks += [TestCallback()]
 #   if args.loadmodel:
 #       dqn.model.load(args.loadmodel)
+    args.weights = None
+    print("args.weights--",args.weights)
+
     if args.weights:
         dqn.load_weights(args.weights)
 
-    dqn.fit(env, callbacks=callbacks, nb_steps=1750000, log_interval=10000)
+    dqn.fit(env, callbacks=callbacks, nb_steps=100000, log_interval=10000)
 
     # After training is done, we save the final weights one more time.
     dqn.save_weights(weights_filename, overwrite=True)
@@ -180,7 +187,7 @@ if args.mode == 'train':
 
     # Finally, evaluate our algorithm for 10 episodes.
     dqn.test(env, nb_episodes=10, visualize=True)
-    dqn.test(env, nb_episodes=10, visualize=True)
+   #dqn.test(env, nb_episodes=10, visualize=True)
  #  gtk.main()
 
 elif args.mode == 'test':
